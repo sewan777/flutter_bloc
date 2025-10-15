@@ -1,16 +1,9 @@
-
 class Todo {
   int id;
   String title;
   bool completed;
 
-
-  Todo({
-    required this.id,
-    required this.title,
-    required this.completed,
-  });
-
+  Todo({required this.id, required this.title, required this.completed});
 
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
@@ -20,12 +13,7 @@ class Todo {
     );
   }
 
-  // This converts Todo object to JSON for API
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'completed': completed,
-    };
+    return {'id': id, 'title': title, 'completed': completed};
   }
 }

@@ -1,7 +1,6 @@
- import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
 import '../models/todo.dart';
 
-// Base state class
 abstract class TodoState extends Equatable {
   @override
   List<Object> get props => [];
