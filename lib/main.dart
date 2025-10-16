@@ -5,6 +5,7 @@ import 'bloc/todo_event.dart';
 import 'repositories/todo_repository.dart';
 import 'services/api_service.dart';
 import 'screens/home_screen.dart';
+import 'screens/page1.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: BlocProvider(
         // Pass Repository to BLoC
         create: (context) => TodoBloc(todoRepository)..add(LoadTodosEvent()),
-        child: HomeScreen(),
+        child: FirstPage(),
       ),
     );
   }

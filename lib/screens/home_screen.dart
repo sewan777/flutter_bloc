@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/todo_bloc.dart';
 import '../bloc/todo_event.dart';
 import '../bloc/todo_state.dart';
+import 'page1.dart';
 import '../models/todo.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -64,14 +65,10 @@ class HomeScreen extends StatelessWidget {
           Expanded(
             child: BlocBuilder<TodoBloc, TodoState>(
               builder: (context, state) {
-
                 // Show loading spinner
                 if (state is TodoLoadingState) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return Center(child: CircularProgressIndicator());
                 }
-
                 // Show error message
                 else if (state is TodoErrorState) {
                   return Center(
@@ -95,7 +92,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
                 }
-
                 // Show todo list
                 else if (state is TodoLoadedState) {
                   List<Todo> todos = state.todos;
@@ -115,11 +111,16 @@ class HomeScreen extends StatelessWidget {
                       Todo todo = todos[index];
 
                       return Card(
-                        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 5,
+                        ),
                         child: ListTile(
                           // Icon based on completion
                           leading: Icon(
-                            todo.completed ? Icons.check_circle : Icons.circle_outlined,
+                            todo.completed
+                                ? Icons.check_circle
+                                : Icons.circle_outlined,
                             color: todo.completed ? Colors.green : Colors.grey,
                           ),
 
@@ -137,7 +138,9 @@ class HomeScreen extends StatelessWidget {
                             icon: Icon(Icons.delete),
                             color: Colors.red,
                             onPressed: () {
-                              context.read<TodoBloc>().add(DeleteTodoEvent(todo.id));
+                              context.read<TodoBloc>().add(
+                                DeleteTodoEvent(todo.id),
+                              );
                             },
                           ),
                         ),
@@ -145,12 +148,9 @@ class HomeScreen extends StatelessWidget {
                     },
                   );
                 }
-
                 // Default state
                 else {
-                  return Center(
-                    child: Text('Welcome'),
-                  );
+                  return Center(child: Text('Welcome'));
                 }
               },
             ),

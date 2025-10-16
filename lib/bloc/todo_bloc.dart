@@ -5,7 +5,6 @@ import 'todo_state.dart';
 import '../models/todo.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  
   final TodoRepository todoRepository;
 
   TodoBloc(this.todoRepository) : super(TodoInitialState()) {
