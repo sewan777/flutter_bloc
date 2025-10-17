@@ -2,45 +2,65 @@ import 'package:dio/dio.dart';
 import '../models/todo.dart';
 
 class ApiService {
-  Dio dio = Dio();
-  String url = 'https://jsonplaceholder.typicode.com';
+  late Dio dio;
 
-  // GET
+  ApiService() {
+    dio = Dio(BaseOptions(
+      baseUrl: 'https://jsonplaceholder.typicode.com',
+      connectTimeout: Duration(seconds: 30),
+      receiveTimeout: Duration(seconds: 30),
+      sendTimeout: Duration(seconds: 30),
+      contentType: 'application/json',
+    ));
+  }
+
   Future<List<Todo>> getAllTodos() async {
     try {
-      Response response = await dio.get('$url/todos');
+      final response = await dio.get('/todos');
 
-      List<Todo> todos = [];
-      for (var json in response.data) {
-        todos.add(Todo.fromJson(json));
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        List<Todo> todos = [];
+
+        for (int i = 0; i < data.length && i < 10; i++) {
+          todos.add(Todo.fromJson(data[i] as Map<String, dynamic>));
+        }
+
+        return todos;
       }
 
-      return todos.take(10).toList();
+      throw Exception('HTTP ${response.statusCode}');
     } catch (e) {
-      throw Exception('Failed to get todos');
+      throw Exception('Failed to get todos: $e');
     }
   }
 
-  // POST 
   Future<Todo> addNewTodo(String title) async {
     try {
-      Response response = await dio.post(
-        '$url/todos',
-        data: {'title': title, 'completed': false, 'userId': 1},
+      final response = await dio.post(
+        '/todos',
+        data: {
+          'title': title,
+          'completed': false,
+          'userId': 1,
+        },
       );
 
-      return Todo.fromJson(response.data);
+      if (response.statusCode == 201) {
+        return Todo.fromJson(response.data as Map<String, dynamic>);
+      }
+
+      throw Exception('HTTP ${response.statusCode}');
     } catch (e) {
-      throw Exception('Failed to add todo');
+      throw Exception('Failed to add todo: $e');
     }
   }
 
-  // DELETE
   Future<void> removeTodo(int id) async {
     try {
-      await dio.delete('$url/todos/$id');
+      await dio.delete('/todos/$id');
     } catch (e) {
-      throw Exception('Failed to delete todo');
+      throw Exception('Failed to delete todo: $e');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 
 class ThemeState extends Equatable {
@@ -85,8 +86,10 @@ class ThemeState extends Equatable {
     switch (fontType) {
       case 'large':
         return TextStyle(
+          fontFamily: 'Poppins',
           fontSize: 18,
           fontWeight: FontWeight.w600,
+          fontStyle: FontStyle.italic,
           color: color,
         );
       case 'small':

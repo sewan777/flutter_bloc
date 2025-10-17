@@ -6,12 +6,12 @@ class TodoRepository {
 
   TodoRepository(this.apiService);
 
-  // BLoC calls this instead of calling ApiService directly
   Future<List<Todo>> fetchAllTodos() async {
     try {
       return await apiService.getAllTodos();
     } catch (e) {
-      throw Exception('Repository: Failed to fetch todos');
+      print('Repository Error: $e');
+      throw Exception('Failed to fetch todos');
     }
   }
 
@@ -19,15 +19,17 @@ class TodoRepository {
     try {
       return await apiService.addNewTodo(title);
     } catch (e) {
-      throw Exception('Repository: Failed to create todo');
+      print('Repository Error: $e');
+      throw Exception('Failed to create todo');
     }
   }
 
   Future<void> deleteTodoById(int id) async {
     try {
-      return await apiService.removeTodo(id);
+      await apiService.removeTodo(id);
     } catch (e) {
-      throw Exception('Repository: Failed to delete todo');
+      print('Repository Error: $e');
+      throw Exception('Failed to delete todo');
     }
   }
 }
