@@ -5,7 +5,7 @@ class ApiService {
   Dio dio = Dio();
   String url = 'https://jsonplaceholder.typicode.com';
 
-  // GET - Get all todos from API
+  // GET
   Future<List<Todo>> getAllTodos() async {
     try {
       Response response = await dio.get('$url/todos');
@@ -21,7 +21,7 @@ class ApiService {
     }
   }
 
-  // POST - Create a new todo
+  // POST 
   Future<Todo> addNewTodo(String title) async {
     try {
       Response response = await dio.post(
@@ -35,7 +35,7 @@ class ApiService {
     }
   }
 
-  // DELETE - Delete a todo
+  // DELETE
   Future<void> removeTodo(int id) async {
     try {
       await dio.delete('$url/todos/$id');
