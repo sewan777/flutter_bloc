@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../models/todo.dart';
+import '../database/app_database.dart';
 
 abstract class TodoState extends Equatable {
   @override
@@ -14,7 +14,7 @@ class TodoLoadingState extends TodoState {}
 
 // State 3: Success state with todo list
 class TodoLoadedState extends TodoState {
-  List<Todo> todos;
+  final List<Todo> todos;
 
   TodoLoadedState(this.todos);
 
@@ -24,7 +24,7 @@ class TodoLoadedState extends TodoState {
 
 // State 4: Error state when something fails
 class TodoErrorState extends TodoState {
-  String errorMessage;
+  final String errorMessage;
 
   TodoErrorState(this.errorMessage);
 

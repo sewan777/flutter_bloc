@@ -7,7 +7,7 @@ import '../bloc/theme_bloc.dart';
 import '../bloc/theme_event.dart';
 import '../bloc/theme_state.dart';
 import '../widgets/custom_button.dart';
-import '../models/todo.dart';
+import '../database/app_database.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -136,21 +136,33 @@ class _HomeScreenState extends State<HomeScreen> {
                               vertical: 5,
                             ),
                             child: ListTile(
+                              // Tap to toggle completion
+                              onTap: () {
+                                context.read<TodoBloc>().add(
+                                  ToggleTodoEvent(todo.id),
+                                );
+                              },
+
                               // Icon based on completion
                               leading: Icon(
                                 todo.completed
                                     ? Icons.check_circle
                                     : Icons.circle_outlined,
                                 color:
-                                    todo.completed
-                                        ? themeState.buttonColor
-                                        : Colors.grey,
+                                todo.completed
+                                    ? themeState.buttonColor
+                                    : Colors.grey,
                               ),
 
-                              // Todo title
+                              // Todo title with strikethrough if completed
                               title: Text(
                                 todo.title,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  decoration: todo.completed
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                ),
                               ),
 
                               // Todo ID

@@ -5,21 +5,22 @@ abstract class TodoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//load
+// Load all todos
 class LoadTodosEvent extends TodoEvent {}
 
-//new
+// Add new todo
 class AddTodoEvent extends TodoEvent {
-  String title;
+  final String title;
 
   AddTodoEvent(this.title);
 
   @override
   List<Object> get props => [title];
 }
-//delete
+
+// Delete todo
 class DeleteTodoEvent extends TodoEvent {
-  int id;
+  final int id;
 
   DeleteTodoEvent(this.id);
 
@@ -27,4 +28,12 @@ class DeleteTodoEvent extends TodoEvent {
   List<Object> get props => [id];
 }
 
+// Toggle todo completion status
+class ToggleTodoEvent extends TodoEvent {
+  final int id;
 
+  ToggleTodoEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
