@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, themeState) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('My TODO App'),
+            title: Text('click_notification--->'),
             backgroundColor: themeState.buttonColor,
             actions: [
               // Notification Icon with Badge
