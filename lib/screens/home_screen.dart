@@ -6,8 +6,11 @@ import '../bloc/todo_state.dart';
 import '../bloc/theme_bloc.dart';
 import '../bloc/theme_event.dart';
 import '../bloc/theme_state.dart';
+import '../bloc/notification_bloc.dart';
+import '../bloc/notification_state.dart';
 import '../widgets/custom_button.dart';
 import '../database/app_database.dart';
+import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,7 +29,52 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('My TODO App'),
             backgroundColor: themeState.buttonColor,
             actions: [
-              // Theme Settings Button
+              // Notification Icon with Badge
+              BlocBuilder<NotificationBloc, NotificationState>(
+                builder: (context, notificationState) {
+                  return Stack(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.notifications),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      if (notificationState.unreadCount > 0)
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${notificationState.unreadCount}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+              // Theme Toggle
               IconButton(
                 icon: Icon(
                   themeState.isDarkMode ? Icons.light_mode : Icons.dark_mode,
@@ -148,8 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 todo.completed
                                     ? Icons.check_circle
                                     : Icons.circle_outlined,
-                                color:
-                                todo.completed
+                                color: todo.completed
                                     ? themeState.buttonColor
                                     : Colors.grey,
                               ),
