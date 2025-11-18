@@ -1,14 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
 import '../widgets/notification_card.dart';
 import '../models/notification_model.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  final FlutterLocalNotificationsPlugin _localNotifications =
+  FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotifications();
+  }
+
+  Future<void> _initializeNotifications() async {
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosSettings = DarwinInitializationSettings();
+    const initSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
+    );
+
+    await _localNotifications.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (details) {
+        // Handle notification tap
+        print('Notification tapped: ${details.payload}');
+      },
+    );
+  }
+
+  Future<void> _showSystemTrayNotification(AppNotification notification) async {
+    const androidDetails = AndroidNotificationDetails(
+      'todo_channel',
+      'TODO Notifications',
+      channelDescription: 'Notifications for TODO app',
+      importance: Importance.high,
+      priority: Priority.high,
+      showWhen: true,
+      enableVibration: true,
+      playSound: true,
+    );
+
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await _localNotifications.show(
+      notification.id.hashCode,
+      notification.title,
+      notification.body,
+      notificationDetails,
+      payload: notification.id,
+    );
+  }
 
   Future<void> _playNotificationSound(bool isImportant) async {
     try {
@@ -29,6 +93,9 @@ class NotificationScreen extends StatelessWidget {
 
     // Play notification sound
     _playNotificationSound(notification.isImportant);
+
+    // Show REAL system tray notification
+    _showSystemTrayNotification(notification);
 
     overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
